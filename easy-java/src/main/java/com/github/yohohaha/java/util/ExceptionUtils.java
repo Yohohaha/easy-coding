@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 /**
- * created at 2020/01/18 02:38:11
+ * Excepition utils for manipulating exceptions.
  *
  * @author Yohohaha
  */

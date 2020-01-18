@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * created at 2019/08/22 16:28:00
+ * Properties with specified prefix.
  *
  * @author Yohohaha
  */

@@ -1,7 +1,7 @@
 package com.github.yohohaha.java.util;
 
 /**
- * created at 2020/01/18 02:24:57
+ * Class Utils used for processing {@code Class}.
  *
  * @author Yohohaha
  */

@@ -1,26 +1,56 @@
 package com.github.yohohaha.java.util;
 
-import javax.annotation.Nullable;
-
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * created at 2020/01/18 02:52:22
+ * String Utils for manipulating strings.
  *
  * @author Yohohaha
  */
 public class StringUtils {
-    public static ConcurrentHashMap<String, Field> CLASS_FIELD_MAP = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Field> CLASS_FIELD_MAP = new ConcurrentHashMap<>();
 
     /**
-     * @param origin 未格式化的字符串
-     * @param pojo   目标对象
+     * format a raw string with a map, formatted key and map key must be the same.
+     * example:
+     * <p>
+     * {@code interpolate("My name is ${name}", new HashMap(){{put("name", "Lee");}});}
+     * will get {@code "My name is Lee"}
      *
-     * @return 格式化后的字符串
+     * @param origin not formatted string
+     * @param map    map
+     *
+     * @return formatted string
      */
-    @Nullable
-    public static String interpolation(@Nullable String origin, @Nullable Object pojo) {
+    public static String interpolate(String origin, Map<String, Object> map) {
+        if (map == null) {
+            return origin;
+        }
+        if (origin == null) {
+            return null;
+        }
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            origin = org.apache.commons.lang3.StringUtils.replace(origin, "{" + entry.getKey() + "}", entry.getValue().toString());
+        }
+        return origin;
+    }
+
+
+    /**
+     * format a raw string with a pojo, formatted key and field name must be the same.
+     * example:
+     * <p>
+     * {@code interpolate("My name is ${name}.", new Person("Lee"));}
+     * will get {@code "My name is Lee."}
+     *
+     * @param origin not formatted string
+     * @param pojo   pojo
+     *
+     * @return formatted string
+     */
+    public static String interpolate(String origin, Object pojo) {
         if (pojo == null) {
             return origin;
         }
@@ -51,7 +81,9 @@ public class StringUtils {
                 String fieldKey = clsName + "." + varName;
                 Field field = CLASS_FIELD_MAP.computeIfAbsent(fieldKey, s -> {
                     try {
-                        return cls.getDeclaredField(varName);
+                        Field declaredField = cls.getDeclaredField(varName);
+                        declaredField.setAccessible(true);
+                        return declaredField;
                     } catch (NoSuchFieldException e) {
                         throw new RuntimeException("no such field, class=" + clsName + ", name=" + varName, e);
                     }
@@ -60,7 +92,7 @@ public class StringUtils {
                     builder.append(field.get(pojo));
                     lastStrEndIdx = i;
                 } catch (IllegalAccessException e) {
-                    throw new RuntimeException("can't access field, name = " + varName);
+                    throw new RuntimeException("can't access field, field name = " + varName);
                 }
 
             } else {
