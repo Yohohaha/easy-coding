@@ -31,12 +31,13 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/yohohaha/easy-coding</url>
+        <url>${project.mainUrl}</url>
         <connection>git@github.com:yohohaha/easy-coding.git</connection>
         <developerConnection>scm:git@github.com:yohohaha/easy-coding.git</developerConnection>
     </scm>
 
     <properties>
+        <project.mainUrl>https://github.com/yohohaha/easy-coding</project.mainUrl>
         <encoding>UTF-8</encoding>
         <java.version>1.8</java.version>
         <slf4j.version>1.7.30</slf4j.version>
