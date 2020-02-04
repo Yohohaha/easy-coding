@@ -24,17 +24,40 @@ public class StringUtils {
      *
      * @return formatted string
      */
-    public static String interpolate(String origin, Map<String, Object> map) {
+    public static String interpolate(String origin, Map<String, ?> map) {
         if (map == null) {
             return origin;
         }
         if (origin == null) {
             return null;
         }
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            origin = org.apache.commons.lang3.StringUtils.replace(origin, "{" + entry.getKey() + "}", entry.getValue().toString());
+        int len = origin.length();
+        StringBuilder builder = new StringBuilder(len);
+        int lastStrEndIdx = 0;
+        int i = 0;
+        while (i + 1 < len) {
+            String substr = origin.substring(i, i + 2);
+            if ("${".equals(substr)) {
+                builder.append(origin, lastStrEndIdx, i);
+                int varNameStartIdx = i + 2;
+                int varNameIdx = varNameStartIdx;
+                while (varNameIdx < len) {
+                    String subVarNameStr = origin.substring(varNameIdx, varNameIdx + 1);
+                    if ("}".equals(subVarNameStr)) {
+                        break;
+                    }
+                    varNameIdx++;
+                }
+                String varName = origin.substring(varNameStartIdx, varNameIdx);
+                i = varNameIdx + 1;
+                builder.append(map.get(varName));
+                lastStrEndIdx = i;
+            } else {
+                i += 1;
+            }
         }
-        return origin;
+        builder.append(origin, lastStrEndIdx, len);
+        return builder.toString();
     }
 
 
