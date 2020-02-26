@@ -13,21 +13,66 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TimeUtils {
 
-    /* source: long */
-
     private static final ConcurrentHashMap<String, DateTimeFormatter> FORMATTER_MAP = new ConcurrentHashMap<>();
 
+
+
+    /* source: long */
+
     /**
-     * 将时间戳转为指定格式的字符串
+     * get formatted string from timestamp
      *
-     * @param ts
-     * @param format
+     * @param ts     timestamp
+     * @param format string format
      *
-     * @return
+     * @return formatted string
      */
     public static String getStringOfTimestamp(final long ts, String format) {
         DateTimeFormatter dateFormatter = getDateTimeFormatter(format);
         return dateFormatter.format(getDateTimeOfTimestamp(ts));
+    }
+
+    /**
+     * get datetime from timestamp
+     *
+     * @param timestamp timestamp
+     *
+     * @return datetime
+     */
+    public static LocalDateTime getDateTimeOfTimestamp(long timestamp) {
+        Instant instant = Instant.ofEpochMilli(timestamp);
+        ZoneId zone = ZoneId.systemDefault();
+        return LocalDateTime.ofInstant(instant, zone);
+    }
+
+
+
+
+    /* source: LocalDateTime */
+
+    /**
+     * get string from datetime
+     *
+     * @param localDateTime localDatetime
+     * @param format        string format
+     *
+     * @return formatted string
+     */
+    public static String getStringofDateTime(LocalDateTime localDateTime, String format) {
+        DateTimeFormatter formatter = getDateTimeFormatter(format);
+        return LocalDateTime.now().format(formatter);
+    }
+
+    /**
+     * parse string to timestamp
+     *
+     * @param time   time string
+     * @param format string format
+     *
+     * @return timestamp
+     */
+    public static long parseStringToTimestamp(String time, String format) {
+        return getTimestampOfDateTime(parseStringToDateTime(time, format));
     }
 
 
@@ -44,33 +89,11 @@ public class TimeUtils {
     }
 
     /**
-     * 将long类型的timestamp转为LocalDateTime
+     * get timestamp from datetime
      *
-     * @param timestamp
+     * @param localDateTime localDatetime
      *
-     * @return
-     */
-    public static LocalDateTime getDateTimeOfTimestamp(long timestamp) {
-        Instant instant = Instant.ofEpochMilli(timestamp);
-        ZoneId zone = ZoneId.systemDefault();
-        return LocalDateTime.ofInstant(instant, zone);
-    }
-
-
-
-
-    /* source: LocalDateTime */
-
-    public static long parseStringToTimeStamp(String time, String format) {
-        return getTimestampOfDateTime(parseStringToDateTime(time, format));
-    }
-
-    /**
-     * 将LocalDateTime转为long类型的timestamp
-     *
-     * @param localDateTime
-     *
-     * @return
+     * @return timestamp
      */
     public static long getTimestampOfDateTime(LocalDateTime localDateTime) {
         ZoneId zone = ZoneId.systemDefault();
@@ -79,28 +102,16 @@ public class TimeUtils {
     }
 
     /**
-     * 将某时间字符串转为自定义时间格式的LocalDateTime
+     * parse string to datetime
      *
-     * @param time
-     * @param format
+     * @param time   time string
+     * @param format string format
      *
-     * @return
+     * @return datetime
      */
     public static LocalDateTime parseStringToDateTime(String time, String format) {
         DateTimeFormatter df = getDateTimeFormatter(format);
         return LocalDateTime.parse(time, df);
-    }
-
-    /**
-     * 给定format，获取当前时间的格式化字符串
-     *
-     * @param format
-     *
-     * @return
-     */
-    public static String getStringofDateTime(LocalDateTime localDateTime, String format) {
-        DateTimeFormatter formatter = getDateTimeFormatter(format);
-        return LocalDateTime.now().format(formatter);
     }
 
 }
