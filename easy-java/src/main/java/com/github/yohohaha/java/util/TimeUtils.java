@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -112,6 +113,40 @@ public class TimeUtils {
     public static LocalDateTime parseStringToDateTime(String time, String format) {
         DateTimeFormatter df = getDateTimeFormatter(format);
         return LocalDateTime.parse(time, df);
+    }
+
+    /**
+     * get the timestamp at 00:00 today
+     *
+     * @return the timestamp at 00:00 today
+     */
+    public static long getCurrentDayZeroPointTimestamp() {
+        return getCurrentDayZeroPointCalendar().getTimeInMillis();
+    }
+
+    /**
+     * get the <code>Calendar</code> obj at 00:00 today
+     *
+     * @return the <code>Calendar</code> obj at 00:00 today
+     */
+    public static Calendar getCurrentDayZeroPointCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
+    }
+
+    /**
+     * get the timestamp at 00:00 today
+     *
+     * @return the timestamp at 00:00 today
+     */
+    public static long getPastDayZeroPointTimestamp(int minus) {
+        Calendar calendar = getCurrentDayZeroPointCalendar();
+        calendar.add(Calendar.DATE, -minus);
+        return calendar.getTimeInMillis();
     }
 
 }
