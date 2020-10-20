@@ -82,7 +82,7 @@ public class IOUtils {
      *
      * @throws NullPointerException if {@code obj} is {@code null}
      */
-    public static String getAbsoulutePathFromResourcePath(String resourcePath) {
+    public static String getAbsolutePathFromResourcePath(String resourcePath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource(resourcePath)).getPath();
     }
 }
