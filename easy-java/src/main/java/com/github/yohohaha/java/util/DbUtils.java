@@ -38,6 +38,7 @@ public class DbUtils {
                         if (inQuotation) {
                             continue;
                         }
+                        // do not add `;`
                         sqlBuilder.append(c);
                         // get one complete sql
                         String sql = sqlBuilder.toString().trim();
