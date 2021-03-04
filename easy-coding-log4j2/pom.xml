@@ -6,6 +6,7 @@
         <artifactId>easy-coding-log-parent</artifactId>
         <groupId>com.github.yohohaha</groupId>
         <version>0.0.2-SNAPSHOT</version>
+        <relativePath>../easy-coding-log-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
